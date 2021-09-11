@@ -2,6 +2,7 @@
 import React, { Component, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from 'react-redux';
+import axios from "axios";
 import { login } from './../store/reducers/useSlice';
 
 function SignInForm() {
@@ -14,8 +15,6 @@ function SignInForm() {
         let target = event.target;
         let value = target.type === "checkbox" ? target.checked : target.value;
         let name = target.name;
-
-
     }
 
 
@@ -31,47 +30,40 @@ function SignInForm() {
             for (var i = 0; i < dataSet.length; i++) {
                 activities = dataSet[i].ACTIVITY_NAME + "," + activities;
             }
-
             userDetails = {
                 userName: dataSet[0].USER_NAME,
                 role: dataSet[0].userrole,
                 activities,
             };
-
             localStorage.setItem("userDetails", (dataSet[0].USER_EMAIL));
             localStorage.setItem("userName", (dataSet[0].USER_FNAME));
-
             //console.log("activities - : ", activities)
             history.push('/');
             //setShow(!show);
         }
-        //console.log();
-        window.location.reload();
+        //window.location.reload();
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        dispatch(login({
-            user: email,
-            password: password,
-            phone: "9611052717",
-            email: "tousif@gmail.com",
-            address: "shimoga",
-            loggedIn: true
-        })
-        );
-        //console.log(this.state);
-        // axios
-        //   .post("https://entemadb.entema-software.com/loginHotelValidation", {
-        //     userEmail: this.state.email,
-        //     userPwd: this.state.password,        
-        //   })
-        //   .then((res) => {
-
-        //     console.log(res.data);
-        //     //this.notify();
-        //     this.afterSubmit(res.data);
-        //   });
+        // dispatch(login({
+        //     user: email,
+        //     password: password,
+        //     phone: phone,
+        //     address: address,
+        //     loggedIn: true
+        // })
+        // );
+        // console.log(this.state);
+        axios
+          .post("http://localhost:3003/validateUserDetails", {
+            customeremail: email        
+          })
+          .then((res) => {
+            console.log(res.data);
+            //this.notify();
+            //this.afterSubmit(res.data);
+          });
 
     }
 
@@ -83,9 +75,7 @@ function SignInForm() {
         <>
 
             <div className="signup">
-
                 <div className="appForm">
-
                     <div className="col-sm-14">
                         <div className="formCenter">
                             <form className="formFields">
@@ -125,16 +115,12 @@ function SignInForm() {
                                     </button>{" "}
                                     <h6 style={{ paddingTop: "10px" }}>
                                         if u didn't register click on
-                                        <text onClick={() => history.push("/signup")} style={{ color: "blue", cursor: "pointer" }}> Sign up.</text></h6>
-
+                                        <text onClick={() => history.push("/signup")} style={{ color: "blue", cursor: "pointer" }}> Sign up.</text>
+                                    </h6>
                                 </div>
                             </form>
                         </div>
                     </div>
-
-
-
-
                 </div>
             </div>
 

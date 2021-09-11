@@ -1,7 +1,7 @@
 /*eslint-disable*/
 
 import React, { useState } from "react";
-// import axios from "axios";
+import axios from "axios";
 
 import { useHistory } from "react-router";
 
@@ -9,29 +9,33 @@ import { useHistory } from "react-router";
 function RegistrationForm(props) {
   const history = useHistory();
 
-  let onSubmitTemplate = {
-    name: "",
-    email: "",
-    password: "",
-    phone: "",
-    address:"",
-    successMessage: null,
-  };
-  const [state, setState] = useState({
-    name: "",
-    email: "",
-    password: "",
-    phone: "",
-    address:"",
-    successMessage: null,
-  });
+  const [name,setName]=useState();
+  const [email,setEmail]=useState();
+  const [password,setPassword]=useState();
+  const [phone,setPhone]=useState();
+  const [address,setAddress]=useState();
+  const [successMessage,setSuccessMessage]=useState(false)
+
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    setState((prevState) => ({
-      ...prevState,
-      [id]: value,
-    }));
-  };
+   
+      //console.log(e.target.value);
+   
+      const input = e.target.name;
+      if (input === "name") {
+        setName(e.target.value);
+      } else if (input === "email") {
+        setEmail(e.target.value);
+      } else if (input === "password") {
+        setPassword(e.target.value);
+      } else if (input === "phone") {
+        setPhone(e.target.value);
+      } else if (input === "address") {
+        setAddress(e.target.value);
+      } else if (input === "successMessage") {
+        setSuccessMessage(e.target.value);
+      }
+    };
+  
 
   const alreadyExist = () => {
     history.push('/sign-in');
@@ -39,33 +43,48 @@ function RegistrationForm(props) {
 
   const sendDetailsToServer = (e) => {
     e.preventDefault();
-    console.log(state);
-    // if (state.name && state.email && state.password && state.phone !== "") {
-    //   console.log(state);
-    //   axios
-    //     .post("https://entemadb.entema-software.com/insertHotelUserData", {
-    //       userFullName: state.name,
-    //       userPhoneNumber: state.phone,
-    //       userEmail: state.email,
-    //       userPwd: state.password,
-    //       //userCreatedDate: state.userCreatedDate,
-    //     })
-    //     .then(() => {
-    //       alert("Submitted");
-    //       setState(onSubmitTemplate);
-    //       redirectToHome();
-    //     });
-    // }
+    console.log("Submit called");
+    if (name && email && address && password && phone !== "") {
+      console.log(state);
+      axios
+        .post("http://localhost:3003/insertcustomer", {
+          customername: name,
+          customerphone: phone,
+          customeraddress: address,
+          customeremail: email,
+          customerpassword: password,
+        })
+        .then(() => {
+          alert("Submitted");
+          setState(onSubmitTemplate);
+          redirectToHome();
+        });
+    }
   };
   const redirectToHome = () => {
     //props.updateTitle('Home')
-    history.push("/");
+    history.push("/login");
   };
 
   const redirectToLogin = () => {
     //props.updateTitle('Login')
     history.push("/login");
   };
+
+  const testOnlurr = () => {
+    console.log('Blurr Called')
+    axios
+      .post("http://localhost:3003/getCustomerEmailValidation", {
+        customeremail:  email,
+      })
+      .then((res) => {
+        if (res.data[0].ROWCOUNT > 0) {
+          alert("Client Already Exist");
+          setEmail("")
+        }
+      });
+  };
+
   return (
     <>
       
@@ -84,9 +103,10 @@ function RegistrationForm(props) {
                     type="text"
                     className="formFieldInput"
                     id="name"
+                    name="name"
                     placeholder="Enter Name"
-                    value={state.name}
-                    onChange={handleChange}
+                    value={name}
+                    onChange={(e)=>handleChange(e)}
                   />
                 </div>
 
@@ -98,9 +118,10 @@ function RegistrationForm(props) {
                     type="number"
                     className="formFieldInput"
                     id="phone"
+                    name="phone"
                     placeholder="Enter phone number"
-                    value={state.phone}
-                    onChange={handleChange}
+                    value={phone}
+                    onChange={(e)=>handleChange(e)}
                   />
                 </div>
                 <div className="formField">
@@ -111,9 +132,10 @@ function RegistrationForm(props) {
                     type="password"
                     className="formFieldInput"
                     id="password"
+                    name="password"
                     placeholder="Password"
-                    value={state.password}
-                    onChange={handleChange}
+                    value={password}
+                    onChange={(e)=>handleChange(e)}
                   />
                 </div>
                 <div className="formField">
@@ -124,9 +146,11 @@ function RegistrationForm(props) {
                     type="email"
                     className="formFieldInput"
                     id="email"
-                    value={state.email}
+                    name="email"
+                    onBlur={testOnlurr}
+                    value={email}
                     placeholder="Enter email"
-                    onChange={handleChange}
+                    onChange={(e)=>handleChange(e)}
                   />
                 </div>
 
@@ -138,7 +162,8 @@ function RegistrationForm(props) {
                     type="text"
                     className="formFieldInput"
                     id="address"
-                    value={state.address}
+                    name="address"
+                    value={address}
                     placeholder="Enter address"
                     onChange={handleChange}
                   />
