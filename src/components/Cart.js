@@ -50,7 +50,7 @@ const Cart = () => {
                                 <div className="row verticalAlign" key={product.id}>
                                     <div className="col-2">
                                         <div className="cart__image">
-                                            <img src={`/images/${product.image}`} alt="" />
+                                            <img src={product.image} alt="" />
                                         </div>
                                     </div>
                                     <div className="col-2">

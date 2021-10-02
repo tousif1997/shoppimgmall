@@ -26,7 +26,7 @@ const Details = () => {
             <div className="row">
                 <div className="col-6">
                     <div className="details__image">
-                        <img src={`/images/${product.image}`} alt="" />
+                        <img src={product.image} alt="" />
                     </div>
                 </div>
                 <div className="col-6">

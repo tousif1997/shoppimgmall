@@ -6,16 +6,17 @@ import { Link } from "react-router-dom"
 const Home = () => {
     const { products } = useSelector(state => state.ProductsReducer);
     const [prodData, setProdData] = useState(products);
+    const [roleLov, setRoleLov] = useState([]);
 
     const [cat, setCat] = useState()
 
-    const [catList, setCatList] = useState([
-        { key: "1", value: "Beans" },
-        { key: "2", value: "Beverages" },
-        { key: "3", value: "Oil" },
-        { key: "4", value: "Cleaning Supplies" },
-        { key: "5", value: "Baby Care" },]
-    );
+    // const [catList, setCatList] = useState([
+    //     { key: "1", value: "Beans" },
+    //     { key: "2", value: "Beverages" },
+    //     { key: "3", value: "Oil" },
+    //     { key: "4", value: "Cleaning Supplies" },
+    //     { key: "5", value: "Baby Care" },]
+    // );
 
     const filterData = () => {
         let computedComments = products;
@@ -39,6 +40,24 @@ const Home = () => {
         filterData();
     }, [cat])
 
+    const getRoleLovData = () => {
+        fetch("http://localhost:3003/getCategoryData", {
+            method: "Get",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                setRoleLov(response);
+            });
+        return roleLov;
+    };
+
+    useEffect(() => {
+        getRoleLovData();
+    }, []);
+
     return (
         <div>
             <CarouselContainer />
@@ -56,10 +75,12 @@ const Home = () => {
                             }}
                             required
                         >
-                            <option value="">All</option>
-                            {catList.map((data) => (
-                                <option key={data.key} value={data.key}>
-                                    {data.value}
+                            <option key="" value="">
+                                Select Category
+                            </option>
+                            {roleLov.map((data) => (
+                                <option key={data.CATEGORY_ID} value={data.CATEGORY_NAME}>
+                                    {data.CATEGORY_NAME}
                                 </option>
                             ))}
                         </select>
@@ -83,7 +104,7 @@ const Home = () => {
                             {product.quantity > 0 ? <div className="col-3" key={product.id}>
                                 <div className="product">
                                     <div className="product__img">
-                                        <Link to={`/details/${product.id}`}><img src={`/images/${product.image}`} alt="img name" /></Link>
+                                        <Link to={`/details/${product.id}`}><img src={product.image} alt="img name" /></Link>
                                     </div>
                                     <div className="product__name">
                                         {product.name}
