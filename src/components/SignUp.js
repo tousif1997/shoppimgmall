@@ -36,16 +36,13 @@ function RegistrationForm(props) {
       }
     };
   
-
-  const alreadyExist = () => {
-    history.push('/sign-in');
-  };
-
   const sendDetailsToServer = (e) => {
     e.preventDefault();
+    testOnlurr();
+
     console.log("Submit called");
     if (name && email && address && password && phone !== "") {
-      console.log(state);
+      // console.log(state);
       axios
         .post("http://localhost:3003/insertcustomer", {
           customername: name,
@@ -63,11 +60,6 @@ function RegistrationForm(props) {
   };
   const redirectToHome = () => {
     //props.updateTitle('Home')
-    history.push("/login");
-  };
-
-  const redirectToLogin = () => {
-    //props.updateTitle('Login')
     history.push("/login");
   };
 
@@ -180,8 +172,6 @@ function RegistrationForm(props) {
                 </div>
               </form>
             </div>
-
-
 
           </div>
         </div>

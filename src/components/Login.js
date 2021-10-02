@@ -46,25 +46,28 @@ function SignInForm() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // dispatch(login({
-        //     user: email,
-        //     password: password,
-        //     phone: phone,
-        //     address: address,
-        //     loggedIn: true
-        // })
-        // );
+
         // console.log(this.state);
         axios
-          .post("http://localhost:3003/validateUserDetails", {
-            customeremail: email        
-          })
-          .then((res) => {
-            console.log(res.data);
-            //this.notify();
-            //this.afterSubmit(res.data);
-          });
+            .post("http://localhost:3003/validateUserDetails", {
+                customeremail: email
+            })
+            .then((res) => {
+                console.log(res.data);
+                if (password === res.data[0].CUSTOMER_PASSWORD) {
+                    dispatch(login({
+                        user: email,
+                        password: password,
+                        phone:  res.data[0].CUSTOMER_PHONE,
+                        address: res.data[0].CUSTOMER_ADDRESS,
+                        loggedIn: true
+                    })
+                    );
 
+                }
+                //this.notify();
+                //this.afterSubmit(res.data);
+            });
     }
 
     const redirectTo = () => {
@@ -123,7 +126,6 @@ function SignInForm() {
                     </div>
                 </div>
             </div>
-
         </>
     )
 

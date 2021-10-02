@@ -43,7 +43,7 @@ const getData = () => {
             //console.log(res.data);
             for (let i = 0; i < res.data.length; i++) {
                 rows.push(products);
-                rows[i] = { id: res.data[i].PRODUCT_ID, ctg: res.data[i].CATEGORY_ID, vid: res.data[i].VENDOR_ID, name: res.data[i].PRODUCT_NAME, image: res.data[i].PRODUCT_IMAGE, price: res.data[i].PRODUCT_PRICE, discount: 2, discountPrice: res.data[i].PRODUCT_PRICE - 2 / 100 * res.data[i].PRODUCT_PRICE, quantity: res.data[i].PRODUCT_QTY, desc: res.data[i].PRODUCT_DESC }
+                rows[i] = { id: res.data[i].PRODUCT_ID, ctg: res.data[i].CATEGORY_ID, vid: res.data[i].VENDOR_ID, name: res.data[i].PRODUCT_NAME, image: res.data[i].PRODUCT_IMAGE, price: res.data[i].PRODUCT_PRICE, discount: res.data[i].DISCOUNT, discountPrice: res.data[i].PRODUCT_PRICE - res.data[i].DISCOUNT / 100 * res.data[i].PRODUCT_PRICE, quantity: res.data[i].PRODUCT_QTY, desc: res.data[i].PRODUCT_DESC }
                 //console.log(rows)
             }
             console.log(rows)

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import CarouselContainer from "./CarouselContainer"
 import { useSelector } from "react-redux";
 import currencyFormatter from "currency-formatter";
@@ -10,8 +10,11 @@ const Home = () => {
     const [cat, setCat] = useState()
 
     const [catList, setCatList] = useState([
-        { key: "1", value: "beans" },
-        { key: "2", value: "oil" }]
+        { key: "1", value: "Beans" },
+        { key: "2", value: "Beverages" },
+        { key: "3", value: "Oil" },
+        { key: "4", value: "Cleaning Supplies" },
+        { key: "5", value: "Baby Care" },]
     );
 
     const filterData = () => {
@@ -32,6 +35,10 @@ const Home = () => {
         //getData();
     };
 
+    useEffect(() => {
+        filterData();
+    }, [cat])
+
     return (
         <div>
             <CarouselContainer />
@@ -49,7 +56,7 @@ const Home = () => {
                             }}
                             required
                         >
-                            <option value="">Select Category</option>
+                            <option value="">All</option>
                             {catList.map((data) => (
                                 <option key={data.key} value={data.key}>
                                     {data.value}
@@ -58,7 +65,7 @@ const Home = () => {
                         </select>
                     </div>
 
-                    <button
+                    { /*<button
                         type="submit"
                         variant="contained"
                         color="primary"
@@ -66,34 +73,36 @@ const Home = () => {
                         onClick={() => filterData()}
                     >
                         Filter
-                    </button>
+                  </button>*/}
                 </div>
             </form>
             <div className="container">
                 <div className="row">
                     {prodData.map(product => (
-                        <div className="col-3" key={product.id}>
-                            <div className="product">
-                                <div className="product__img">
-                                    <Link to={`/details/${product.id}`}><img src={`/images/${product.image}`} alt="image name" /></Link>
-                                </div>
-                                <div className="product__name">
-                                    {product.name}
-                                </div>
-                                <div className="row">
-                                    <div className="col-6">
-                                        <div className="product__price">
-                                            <span className="actualPrice">{currencyFormatter.format(product.price, { code: 'USD' })}</span> <span className="discount">{product.discount}%</span>
+                        <>
+                            {product.quantity > 0 ? <div className="col-3" key={product.id}>
+                                <div className="product">
+                                    <div className="product__img">
+                                        <Link to={`/details/${product.id}`}><img src={`/images/${product.image}`} alt="img name" /></Link>
+                                    </div>
+                                    <div className="product__name">
+                                        {product.name}
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-6">
+                                            <div className="product__price">
+                                                {product.discount !== 0 ? <span className="actualPrice">{currencyFormatter.format(product.price, { code: 'INR' })}</span> : null}
+                                                <span className="discount">{product.discount}%</span>
+                                            </div>
+                                        </div>
+                                        <div className="col-6">
+                                            <div className="product__discount__price">
+                                                {currencyFormatter.format(product.discountPrice, { code: 'INR' })}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="col-6">
-                                        <div className="product__discount__price">
-                                            {currencyFormatter.format(product.discountPrice, { code: 'USD' })}
-                                        </div>
-                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            </div> : null}</>
                     ))}
                 </div>
             </div>

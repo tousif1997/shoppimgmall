@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
 import currencyFormatter from "currency-formatter";
 import { BsDash, BsPlus } from "react-icons/bs";
+
+
 const Details = () => {
     const [quantity, setQuantity] = useState(1);
     const { id } = useParams();
@@ -32,7 +34,8 @@ const Details = () => {
                         {product.name}
                     </div>
                     <div className="details__prices">
-                        <span className="details__actaul">{currencyFormatter.format(product.price, { code: 'INR' })}</span>
+                        {product.discount !== 0 ? <span className="details__actaul">{currencyFormatter.format(product.price, { code: 'INR' })}</span> : null}
+                        <span className="discount">{product.discount}%</span>
                         <span className="details__discount">{currencyFormatter.format(product.discountPrice, { code: 'INR' })}</span>
 
                     </div>
@@ -40,7 +43,7 @@ const Details = () => {
                         <div className="details__incDec">
                             <span className="dec" onClick={decQuantity}><BsDash /></span>
                             <span className="quantity">{quantity}</span>
-                            <span className="inc" onClick={() => setQuantity(quantity + 1)}><BsPlus /></span>
+                            {(quantity < product.quantity) ? <span className="inc" onClick={() => { setQuantity(quantity + 1); console.log(product.quantity) }}><BsPlus /></span> : null}
                             <button className="btn-default" onClick={() => dispatch({ type: 'ADD_TO_CART', payload: { product, quantity } })}>add to cart</button>
                         </div>
                     </div>

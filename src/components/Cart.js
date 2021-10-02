@@ -1,11 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from "react-redux";
 import currencyFormatter from "currency-formatter";
 import { BsDash, BsPlus } from "react-icons/bs";
 import { BsReverseBackspaceReverse } from "react-icons/bs";
+
+
 const Cart = () => {
     const { products, totalQuantities, totalPrice } = useSelector(state => state.CartReducer);
     const dispatch = useDispatch();
+
+    let dta = {
+        id: "",
+        qty: 0
+    }
+    const [update, setUpdate] = useState();
+
+    const qtyCheck = () => {
+        //console.log("SAMAN", products);
+        let rows = [];
+
+        for (let i = 0; i < products.length; i++) {
+            rows[i] = {
+                id: products[i].id,
+                qty: products[i].quantity,
+            }
+        }
+        setUpdate(rows);
+        console.log("update,", rows);
+    }
+
     return (
         <div className="cart">
             <div className="container">
@@ -82,7 +105,7 @@ const Cart = () => {
                                             {currencyFormatter.format(totalPrice, { code: 'INR' })}
                                         </div>
                                     </div>
-                                    <button type="button" className="checkout">Checkout</button>
+                                    <button type="button" className="checkout" onClick={() => qtyCheck()}>Checkout</button>
                                 </div>
                             </div>
                         </div>
